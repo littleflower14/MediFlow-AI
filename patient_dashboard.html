@@ -1,0 +1,963 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediFlow AI - Patient Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #263445;
+        }
+
+        header {
+            background: #176b87;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h3 {
+            color: #176b87;
+            margin-top: 0;
+        }
+
+        h4 {
+            color: #176b87;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 16px;
+            border: 1px solid #ccd5df;
+            border-radius: 6px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background: #176b87;
+            color: white;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+        }
+
+        button:hover {
+            background: #10536b;
+        }
+
+        button:disabled {
+            background: #9aaab3;
+            cursor: not-allowed;
+        }
+
+        .logout-btn {
+            background: #ffffff;
+            color: #176b87;
+        }
+
+        .logout-btn:hover {
+            background: #e6f1f5;
+        }
+
+        .refresh-btn {
+            background: #64748b;
+        }
+
+        .accept-btn {
+            background: #15803d;
+        }
+
+        .accept-btn:hover {
+            background: #166534;
+        }
+
+        .decline-btn {
+            background: #dc2626;
+        }
+
+        .decline-btn:hover {
+            background: #b91c1c;
+        }
+
+        .enquiry {
+            border: 1px solid #e0e6ed;
+            padding: 20px;
+            margin: 18px 0;
+            border-radius: 8px;
+        }
+
+        .message {
+            margin-top: 12px;
+            color: #176b87;
+        }
+
+        .reply {
+            background: #eef8f3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 12px;
+            white-space: pre-wrap;
+        }
+
+        .appointment {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .muted {
+            color: #697786;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: #e5e7eb;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .success {
+            color: #15803d;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #697786;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px;
+            }
+
+            main {
+                padding: 0 12px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h2>MediFlow AI</h2>
+
+    <div class="header-actions">
+        <span>Patient Dashboard</span>
+
+        <button class="logout-btn" id="logoutButton">
+            Logout
+        </button>
+    </div>
+
+</header>
+
+<main>
+
+    <!-- SUBMIT ENQUIRY -->
+
+    <section class="card">
+
+        <h3>Submit a New Enquiry</h3>
+
+        <p class="muted">
+            Submit your enquiry to the appropriate medical department.
+            The doctor will review your message and respond.
+        </p>
+
+        <form id="enquiryForm">
+
+            <label for="department">Department</label>
+
+            <select id="department" required>
+
+                <option value="">Select Department</option>
+
+                <option value="Cardiology">Cardiology</option>
+
+                <option value="General Medicine">
+                    General Medicine
+                </option>
+
+                <option value="Pediatrics">Pediatrics</option>
+
+                <option value="Orthopedics">Orthopedics</option>
+
+            </select>
+
+            <label for="category">Category</label>
+
+            <select id="category" required>
+
+                <option value="">Select Category</option>
+
+                <option value="General Enquiry">
+                    General Enquiry
+                </option>
+
+                <option value="Appointment">
+                    Appointment
+                </option>
+
+                <option value="Medical Question">
+                    Medical Question
+                </option>
+
+            </select>
+
+            <label for="message">Your Message</label>
+
+            <textarea
+                id="message"
+                placeholder="Describe your enquiry..."
+                maxlength="2000"
+                required
+            ></textarea>
+
+            <button type="submit" id="submitButton">
+                Submit Enquiry
+            </button>
+
+        </form>
+
+        <p id="formMessage" class="message" role="status"></p>
+
+    </section>
+
+
+    <!-- PATIENT ENQUIRIES -->
+
+    <section class="card">
+
+        <h3>My Enquiries</h3>
+
+        <button class="refresh-btn" id="refreshButton">
+            Refresh Enquiries
+        </button>
+
+        <div id="enquiryList" aria-live="polite">
+            Loading your enquiries...
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const form = document.getElementById("enquiryForm");
+
+    const formMessage =
+        document.getElementById("formMessage");
+
+    const enquiryList =
+        document.getElementById("enquiryList");
+
+    const submitButton =
+        document.getElementById("submitButton");
+
+    const refreshButton =
+        document.getElementById("refreshButton");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+
+    // Safely create text elements
+
+    function createTextElement(tag, text, className = "") {
+
+        const element = document.createElement(tag);
+
+        element.textContent = text ?? "";
+
+        if (className) {
+            element.className = className;
+        }
+
+        return element;
+    }
+
+
+    // Read a field supporting common Java JSON naming styles
+
+    function getField(item, ...names) {
+
+        for (const name of names) {
+
+            if (
+                item[name] !== undefined &&
+                item[name] !== null
+            ) {
+                return item[name];
+            }
+        }
+
+        return "";
+    }
+
+
+    // Read JSON response safely
+
+    async function readResponse(response) {
+
+        const contentType =
+            response.headers.get("content-type") || "";
+
+        if (!contentType.includes("application/json")) {
+
+            if (response.redirected) {
+                window.location.href = "/patient/login";
+                throw new Error("Please log in again.");
+            }
+
+            throw new Error(
+                "Unexpected server response. Please try again."
+            );
+        }
+
+        return await response.json();
+    }
+
+
+    // Submit a new patient enquiry
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const data = {
+
+            message: document.getElementById("message").value.trim(),
+
+            department:
+                document.getElementById("department").value,
+
+            category:
+                document.getElementById("category").value
+
+        };
+
+
+        if (!data.message || !data.department || !data.category) {
+
+            formMessage.textContent =
+                "Please complete all the fields.";
+
+            formMessage.className = "message error";
+
+            return;
+        }
+
+
+        submitButton.disabled = true;
+
+        submitButton.textContent = "Submitting...";
+
+        formMessage.textContent =
+            "Please wait while your enquiry is submitted.";
+
+        formMessage.className = "message";
+
+
+        try {
+
+            const response = await fetch(
+                "/api/patient/enquiries",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(data)
+                }
+            );
+
+
+            const result = await readResponse(response);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.error || "Unable to submit enquiry."
+                );
+            }
+
+
+            formMessage.textContent =
+                result.message ||
+                "Your enquiry was submitted successfully!";
+
+            formMessage.className = "message success";
+
+            form.reset();
+
+            await loadEnquiries();
+
+
+        } catch (error) {
+
+            formMessage.textContent = error.message;
+
+            formMessage.className = "message error";
+
+
+        } finally {
+
+            submitButton.disabled = false;
+
+            submitButton.textContent = "Submit Enquiry";
+
+        }
+
+    });
+
+
+    // Load patient's enquiries
+
+    async function loadEnquiries() {
+
+        enquiryList.textContent = "Loading your enquiries...";
+
+        refreshButton.disabled = true;
+
+
+        try {
+
+            const response = await fetch(
+                "/api/patient/enquiries"
+            );
+
+
+            const enquiries = await readResponse(response);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    enquiries.error || "Unable to load enquiries."
+                );
+            }
+
+
+            if (!Array.isArray(enquiries)) {
+
+                throw new Error(
+                    "Unexpected enquiry data received from server."
+                );
+            }
+
+
+            enquiryList.innerHTML = "";
+
+
+            if (enquiries.length === 0) {
+
+                enquiryList.appendChild(
+                    createTextElement(
+                        "p",
+                        "You have not submitted any enquiries yet.",
+                        "empty"
+                    )
+                );
+
+                return;
+            }
+
+
+            enquiries.forEach(item => {
+
+                displayEnquiry(item);
+
+            });
+
+
+        } catch (error) {
+
+            console.error("Enquiry loading error:", error);
+
+            enquiryList.textContent = error.message;
+
+
+        } finally {
+
+            refreshButton.disabled = false;
+
+        }
+
+    }
+
+
+    // Display an individual enquiry
+
+    function displayEnquiry(item) {
+
+        const card = document.createElement("div");
+
+        card.className = "enquiry";
+
+
+        const enquiryId = getField(item, "id", "enquiryId");
+
+        const message = getField(item, "message");
+
+        const department = getField(item, "department");
+
+        const category = getField(item, "category");
+
+        const priority = getField(item, "priority");
+
+        const status = getField(item, "status") || "Pending";
+
+        const doctorReply = getField(
+            item,
+            "doctorReply",
+            "doctor_reply"
+        );
+
+        const aiReply = getField(
+            item,
+            "aiReply",
+            "ai_reply"
+        );
+
+        const appointmentDate = getField(
+            item,
+            "appointmentDate",
+            "appointment_date"
+        );
+
+        const appointmentTime = getField(
+            item,
+            "appointmentTime",
+            "appointment_time"
+        );
+
+        const appointmentStatus = getField(
+            item,
+            "appointmentStatus",
+            "appointment_status"
+        );
+
+        const doctorName = getField(
+            item,
+            "doctorName",
+            "doctor_name"
+        );
+
+
+        // Enquiry heading
+
+        card.appendChild(
+            createTextElement(
+                "h4",
+                "Enquiry #" + enquiryId
+            )
+        );
+
+
+        // Enquiry details
+
+        card.appendChild(
+            createTextElement(
+                "p",
+                "Your Message: " + message
+            )
+        );
+
+        card.appendChild(
+            createTextElement(
+                "p",
+                "Department: " + (department || "Not available")
+            )
+        );
+
+        card.appendChild(
+            createTextElement(
+                "p",
+                "Category: " + (category || "Not available")
+            )
+        );
+
+        if (priority) {
+
+            card.appendChild(
+                createTextElement(
+                    "p",
+                    "Priority: " + priority
+                )
+            );
+        }
+
+
+        // Enquiry status
+
+        const statusElement = createTextElement(
+            "span",
+            "Enquiry Status: " + status,
+            "status"
+        );
+
+        card.appendChild(statusElement);
+
+
+        // Doctor information
+
+        if (doctorName) {
+
+            card.appendChild(
+                createTextElement(
+                    "p",
+                    "Assigned Doctor: " + doctorName
+                )
+            );
+        }
+
+
+        // Doctor's personal reply
+
+        const replyBox = document.createElement("div");
+
+        replyBox.className = "reply";
+
+        replyBox.appendChild(
+            createTextElement(
+                "strong",
+                "Doctor's Reply"
+            )
+        );
+
+        replyBox.appendChild(
+            createTextElement(
+                "p",
+                doctorReply ||
+                "Waiting for the doctor's reply."
+            )
+        );
+
+        card.appendChild(replyBox);
+
+
+        // AI acknowledgement
+
+        if (aiReply) {
+
+            const aiBox = document.createElement("div");
+
+            aiBox.className = "reply";
+
+            aiBox.style.background = "#f1f5f9";
+
+            aiBox.appendChild(
+                createTextElement(
+                    "strong",
+                    "MediFlow AI Acknowledgement"
+                )
+            );
+
+            aiBox.appendChild(
+                createTextElement("p", aiReply)
+            );
+
+            card.appendChild(aiBox);
+
+        }
+
+
+        // Appointment information
+
+        if (appointmentDate || appointmentTime) {
+
+            const appointmentBox =
+                document.createElement("div");
+
+            appointmentBox.className = "appointment";
+
+            appointmentBox.appendChild(
+                createTextElement(
+                    "strong",
+                    "Appointment Proposal"
+                )
+            );
+
+            appointmentBox.appendChild(
+                createTextElement(
+                    "p",
+                    "Date: " + (appointmentDate || "Not available")
+                )
+            );
+
+            appointmentBox.appendChild(
+                createTextElement(
+                    "p",
+                    "Time: " + (appointmentTime || "Not available")
+                )
+            );
+
+            appointmentBox.appendChild(
+                createTextElement(
+                    "p",
+                    "Appointment Status: " +
+                    (appointmentStatus || "Not available")
+                )
+            );
+
+
+            // Show Accept and Decline only for Proposed appointments
+
+            if (
+                String(appointmentStatus).toLowerCase() === "proposed"
+            ) {
+
+                const acceptButton =
+                    createTextElement("button", "Accept Appointment");
+
+                acceptButton.className = "accept-btn";
+
+                acceptButton.type = "button";
+
+                acceptButton.addEventListener("click", () => {
+
+                    respondToAppointment(
+                        enquiryId,
+                        "Accept",
+                        acceptButton,
+                        declineButton
+                    );
+
+                });
+
+
+                const declineButton =
+                    createTextElement("button", "Decline Appointment");
+
+                declineButton.className = "decline-btn";
+
+                declineButton.type = "button";
+
+                declineButton.addEventListener("click", () => {
+
+                    respondToAppointment(
+                        enquiryId,
+                        "Decline",
+                        acceptButton,
+                        declineButton
+                    );
+
+                });
+
+
+                appointmentBox.append(
+                    acceptButton,
+                    declineButton
+                );
+
+            }
+
+            card.appendChild(appointmentBox);
+
+        }
+
+
+        enquiryList.appendChild(card);
+
+    }
+
+
+    // Accept or decline an appointment
+
+    async function respondToAppointment(
+        enquiryId,
+        decision,
+        acceptButton,
+        declineButton
+    ) {
+
+        if (!confirm(
+            "Are you sure you want to " +
+            decision.toLowerCase() +
+            " this appointment?"
+        )) {
+            return;
+        }
+
+
+        acceptButton.disabled = true;
+
+        declineButton.disabled = true;
+
+
+        try {
+
+            const response = await fetch(
+                `/api/patient/enquiries/${enquiryId}/appointment-response`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        response: decision
+                    })
+                }
+            );
+
+
+            const result = await readResponse(response);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.error ||
+                    "Unable to update appointment response."
+                );
+            }
+
+
+            alert(
+                decision === "Accept"
+                    ? "Appointment accepted successfully!"
+                    : "Appointment declined successfully!"
+            );
+
+
+            await loadEnquiries();
+
+
+        } catch (error) {
+
+            alert(error.message);
+
+            acceptButton.disabled = false;
+
+            declineButton.disabled = false;
+
+        }
+
+    }
+
+
+    // Refresh enquiries
+
+    refreshButton.addEventListener("click", function() {
+
+        loadEnquiries();
+
+    });
+
+
+    // Patient logout
+
+    logoutButton.addEventListener("click", async function() {
+
+        if (!confirm("Are you sure you want to logout?")) {
+            return;
+        }
+
+        logoutButton.disabled = true;
+
+        try {
+
+            const response = await fetch(
+                "/patient/logout",
+                {
+                    method: "POST"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to logout.");
+            }
+
+            window.location.href = "/patient/login";
+
+        } catch (error) {
+
+            alert(error.message);
+
+            logoutButton.disabled = false;
+
+        }
+
+    });
+
+
+    // Load enquiries when dashboard opens
+
+    loadEnquiries();
+
+</script>
+
+</body>
+</html>

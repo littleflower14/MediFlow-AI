@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediFlow AI - Healthcare Administration</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header class="top-header">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h1>MediFlow AI</h1>
+                <p>Smart Healthcare Administration</p>
+            </div>
+        </div>
+
+        <div class="header-label">
+            AI-Powered Enquiry Management
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome-section">
+            <div>
+                <h2>Healthcare Dashboard</h2>
+                <p>Manage patient enquiries with intelligent automation.</p>
+            </div>
+            <span class="system-status">● System Active</span>
+        </section>
+
+        <!-- Dashboard Statistics -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <p>Total Enquiries</p>
+                <h2 id="totalCount">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Pending Enquiries</p>
+                <h2 id="pendingCount">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>High Priority</p>
+                <h2 id="highCount">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Completed</p>
+                <h2 id="completedCount">0</h2>
+            </div>
+
+        </section>
+
+        <!-- Patient Enquiry Form -->
+        <section class="content-card">
+
+            <div class="section-heading">
+                <div>
+                    <h2>New Patient Enquiry</h2>
+                    <p>Enter the patient's enquiry details below.</p>
+                </div>
+                <span class="ai-label">AI Analysis Enabled</span>
+            </div>
+
+            <form id="enquiryForm">
+
+                <div class="form-group">
+                    <label for="patientName">Patient Name</label>
+                    <input
+                        type="text"
+                        id="patientName"
+                        placeholder="Enter patient name"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter email address"
+                        maxlength="150"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Enquiry Message</label>
+                    <textarea
+                        id="message"
+                        rows="4"
+                        maxlength="2000"
+                        placeholder="Describe the patient's enquiry..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" id="submitButton">
+                    Submit Enquiry & Analyse with AI
+                </button>
+
+                <p id="formMessage" class="form-message"></p>
+
+            </form>
+
+        </section>
+
+        <!-- Enquiry Management Table -->
+        <section class="content-card">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Patient Enquiries</h2>
+                    <p>View and manage submitted enquiries.</p>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search enquiries..."
+                >
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Enquiry</th>
+                            <th>Category</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>AI Reply Draft</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="enquiriesTable">
+                        <tr>
+                            <td colspan="7">
+                                Loading enquiries...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <footer>
+            <p>
+                MediFlow AI | Healthcare Administration Demo
+            </p>
+            <p>
+                AI-generated replies require human staff review.
+                This application does not provide medical diagnosis.
+            </p>
+        </footer>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
