@@ -73,9 +73,13 @@ python app.py
 
 ### 7. Open in your browser
 
-http://127.0.0.1:5000   http://127.0.0.1:5000/patient/dashboard
+http://127.0.0.1:5000  http://127.0.0.1:5000/doctor/dashboard
 
 ## Database
+##Doctor Pass Word
+username:arun@mediflow.com
+Pass Word:Arun@1234
+
 
 The application uses SQLite to store patient enquiries, AI analysis, timestamps and enquiry status.
 
